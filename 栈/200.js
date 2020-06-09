@@ -6,87 +6,140 @@
 此外，你可以假设该网格的四条边均被水包围。
 */
 /**
+ * 「方法一：使用自己的stack」
  * @param {character[][]} grid
  * @return {number}
  */
-var height = width = 0;
-var g = [];
-used = new Set();
-// DFS
-function getNeighbors(str) {
-    let nbs = [];
-    let [x, y] = str.split('-');
-    x = parseInt(x);
-    y = parseInt(y);
-    if (x != 0) nbs.push(x - 1 + '-' + y)
-    if (y < width - 1) nbs.push(x + '-' + (y + 1))
-    if (x < height - 1) nbs.push(x + 1 + '-' + y)
-    if (y != 0) nbs.push(x + '-' + (y - 1))
-    nbs.filter(item => {
-        if (!used.has(item)) used.add(item);
-        return !used.has(item)
-    })
-    return nbs
+
+// let numIslands = function (grid) {
+//     let _height = _width = 0;
+//     let _g = [];
+//     let _used = new Set();
+//     let _stack = [];
+//     // DFS 维护自己的stack
+//     function isIsland(key) {
+//         let [x, y] = key.split('-');
+//         return _g[x][y] == 1
+//     }
+//     function getNeighbors(str) {
+//         let nbs = [];
+//         let [x, y] = str.split('-');
+//         x = parseInt(x);
+//         y = parseInt(y);
+//         if (x != 0) {
+//             nbs.push(x - 1 + '-' + y)
+//         }
+//         if (y < _width - 1) nbs.push(x + '-' + (y + 1))
+//         if (x < _height - 1) nbs.push(x + 1 + '-' + y)
+//         if (y != 0) nbs.push(x + '-' + (y - 1))
+//         return nbs
+
+//     }
+//     function electNode() {
+//         // 从后向前选一个点
+//         for (let i = _height - 1; i >= 0; i--) {
+//             for (let j = _width - 1; j >= 0; j--) {
+//                 let key = i + '-' + j;
+//                 if (isIsland(key) && !_used.has(key)) {
+//                     return key
+//                 }
+//             }
+//         }
+//         return false
+//     }
+//     function DFS() {
+//         if (!_stack.length) return;
+//         let node = _stack.pop();
+//         let nbs = getNeighbors(node);
+//         nbs.forEach(item => {
+//             if (isIsland(item) && !_used.has(item)) {
+//                 _used.add(item);
+//                 _stack.push(item);
+//             }
+//         })
+//         DFS();
+//     }
+//     if (!grid || !grid.length) {
+//         return 0
+//     }
+//     _g = grid;
+//     let cur = null;
+//     _height = grid.length;
+//     _width = grid[0].length;
+//     let count = 0;
+//     while (cur = electNode()) {
+//         _used.add(cur);
+//         _stack.push(cur);
+//         DFS();
+//         count++;
+//     }
+//     return count
+// };
+// console.log(numIslands([["1", "1", "0", "0", "0"], ["1", "1", "0", "0", "0"], ["0", "0", "1", "0", "0"], ["0", "0", "0", "1", "1"]]))
+
+/**
+ * 「方法二：利用系统的stack」
+ * @param {character[][]} grid
+ * @return {number}
+ */
 
 
-    // console.log(height)
-    // console.log(width)
-    // let nbs = [];
-    // let [x, y] = str.split('-');
-    // x = parseInt(x);
-    // y = parseInt(y);
-    // x != 0 && !used.has(x - 1 + '-' + y) ? 0 : nbs.push(x - 1 + '-' + y);
-    // y < width - 1 && used.has(x + '-' + (y + 1)) ? 0 : nbs.push(x + '-' + (y + 1))
-    // x < height - 1 && used.has(x + 1 + '-' + y) ? 0 : nbs.push(x + 1 + '-' + y)
-    // y != 0 && used.has(x + '-' + (y - 1)) ? 0 : nbs.push(x + '-' + (y - 1))
-    // return nbs
-}
-function electNode() {
-    // 从后向前选一个点
-    for (let i = height - 1; i >= 0; i--) {
-        for (let j = width - 1; j >= 0; j--) {
-            if (!(i + '-' + j in used)) {
-                used.add(i + '-' + j)
-                return i + '-' + j
+let numIslands = function (grid) {
+    let _height = _width = 0;
+    let _g = [];
+    let _used = new Set();
+    // DFS 利用系统stack
+    function isIsland(key) {
+        let [x, y] = key.split('-');
+        return _g[x][y] == 1
+    }
+    function getNeighbors(str) {
+        let nbs = [];
+        let [x, y] = str.split('-');
+        x = parseInt(x);
+        y = parseInt(y);
+        if (x != 0) {
+            nbs.push(x - 1 + '-' + y)
+        }
+        if (y < _width - 1) nbs.push(x + '-' + (y + 1))
+        if (x < _height - 1) nbs.push(x + 1 + '-' + y)
+        if (y != 0) nbs.push(x + '-' + (y - 1))
+        return nbs
+
+    }
+    function electNode() {
+        // 从后向前选一个点
+        for (let i = _height - 1; i >= 0; i--) {
+            for (let j = _width - 1; j >= 0; j--) {
+                let key = i + '-' + j;
+                if (isIsland(key) && !_used.has(key)) {
+                    return key
+                }
             }
         }
+        return false
     }
-    return false
-}
-function DFS(node) {
-    if (!used.has(node)) {
-        used.add(node);
+    function DFS(node) {
+        if (_used.has(node) || !isIsland(node)) return;
+        _used.add(node);
+        let nbs = getNeighbors(node);
+        nbs.forEach(item => {
+            DFS(item);
+        })
     }
-    console.log('used', used)
-    let nbs = getNeighbors(node);
-    console.log('used', used)
-    console.log('nbs', nbs)
-
-    if (!nbs.length) {
-        return
-    }
-
-    nbs.forEach(item => {
-        DFS(item);
-    })
-}
-
-var numIslands = function (grid) {
     if (!grid || !grid.length) {
         return 0
     }
-    g = grid;
-    var cur = null;
-    height = grid.length;
-    width = grid[0].length;
-    var count = 0;
+    _g = grid;
+    let cur = null;
+    _height = grid.length;
+    _width = grid[0].length;
+    let count = 0;
     while (cur = electNode()) {
-        console.log('cur', cur)
-
         DFS(cur);
         count++;
     }
-    console.log('??')
     return count
 };
-console.log(numIslands([["1", "1", "1", "1", "0"], ["1", "1", "0", "1", "0"], ["1", "1", "0", "0", "0"], ["0", "0", "0", "0", "0"]]))
+
+console.log(numIslands([["1", "1", "0", "0", "0"], ["1", "1", "0", "0", "0"], ["0", "0", "1", "0", "0"], ["0", "0", "0", "1", "1"]]))
