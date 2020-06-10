@@ -26,35 +26,28 @@
 相对来说，能用迭代不用递归（因为递归不断调用函数，浪费空间，容易造成堆栈溢出）
 */
 var inorderTraversal = function (root) {
-
     let stack = [];
-    let visited = new Set();
+    let used = new Set();
     let result = [];
     if (root) {
         stack.push(root);
-        visited.add(root);
+    }
+
+    function top() {
+        return stack[stack.length-1]
     }
 
     while (stack.length) {
-        console.log('stack', stack.length)
-
-        let cur = stack.pop();
-        console.log('cur', cur.val)
-        visited.add(cur);
-        //出口
-        if (!cur.left || visited.has(cur.left)) {
-            // visited.add(cur);
-            result.push(cur.val)
-            // continue;
-        }
-        if (cur.right && !visited.has(cur.right)) {
-            visited.add(cur.right);
-            stack.push(cur.right)
-        }
-        stack.push(cur)
-        if (cur.left && !visited.has(cur.left)) {
-            // visited.add(cur.left);
-            stack.push(cur.left)
+        let cur = top();
+        if (cur.left && !used.has(cur.left)) {
+            stack.push(cur.left);
+        } else {
+            stack.pop();
+            used.add(cur);
+            result.push(cur.val);
+            if (cur.right) {
+                stack.push(cur.right);
+            }
         }
     }
     console.log('result', result)
