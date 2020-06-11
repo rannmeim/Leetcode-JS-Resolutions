@@ -65,14 +65,6 @@ var decodeString = function (s) {
     }
     for (let i = 0; i < s.length;i++) {
         var c = s[i];
-        if (/\d/.test(c) || c == '[') {
-            stack.push(c);
-            continue;
-        }
-        if (empty() && /[a-zA-Z]/.test(c)) {
-            result += c;
-            continue;
-        }
         if (c == ']') {
             let cc = null;
             let words = "";
@@ -80,12 +72,25 @@ var decodeString = function (s) {
                 if (cc == '[') break;
                 words = cc + words;
             }
-            cc = stack.pop()
-            // todo words * parseInt(cc)
-            result += words;
+            while(/\d/.test(top())){
+                cc=stack.pop() + cc;
+            }
+            let str = "";
+            for(let i = 0; i <parseInt(cc);i++ ){
+                str += words;
+            }
+            stack.push.apply(stack, str.split(''));
+        } else {
+            stack.push(c);
         }
     }
+    result = stack.join("");
+    console.log('result', result)
     return result
 };
 // @lc code=end
 
+
+// @after-stub-for-debug-begin
+module.exports = decodeString;
+// @after-stub-for-debug-end
