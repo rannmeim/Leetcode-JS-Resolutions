@@ -62,9 +62,25 @@
  * @return {boolean}
  */
 // 1.『 DFS  Iterate 』
-// var canVisitAllRooms = function(rooms) {
-    
-// };
+var canVisitAllRooms = function(rooms) {
+    let stack = [];
+    let visited = new Set();
+    visited.add(0);
+    stack.push(0);
+    while (stack.length) {
+        let index = stack.pop();
+        let room = rooms[index];
+        room.forEach(key => {
+            if (!visited.has(key)) {
+                visited.add(key);
+                stack.push(key);
+            }
+        })
+    }
+    let result = visited.size == rooms.length ? true : false;
+    console.log(result);
+    return result;
+};
 
 // 2.『 DFS  Recursive 』
 var canVisitAllRooms = function (rooms) {
