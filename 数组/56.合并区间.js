@@ -46,8 +46,11 @@ var merge = function (intervals) {
     }
     let merged = [];
     let queue = intervals;
-    merged.push(queue.shift());
     while (queue.length) {
+        if (!merged.length) {
+            merged.push(queue.shift());
+            continue;            
+        }
         let cur = queue.shift();
         let i = 0;
         let hasMerged = false;
@@ -56,7 +59,7 @@ var merge = function (intervals) {
             let afterMerge = canMerge(cur, part);
             if (afterMerge) {
                 hasMerged = true;
-                merged.shift();
+                merged.splice(i, 1);
                 queue.push(afterMerge);
                 break;
             }
@@ -64,6 +67,8 @@ var merge = function (intervals) {
         }
         if (!hasMerged) merged.push(cur);
     }
+    // 从小到大排列merged
+    merged.sort((a, b) => a[0] - b[0]);
     console.log(merged);
     return merged;
 };
