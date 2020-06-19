@@ -39,32 +39,39 @@ var longestPalindrome = function (s) {
     s = s.split('');
     function longestPrefix(arr1, arr2) {
         arr1 = [...arr1].reverse();
-        for (let i = 0; i < arr1.length; i++){
-            if (arr1[i] != arr2[i]) {
-                // return arr1.splice(0, i).join(''); //从靠近中心往远处
-                return arr1.splice(0, i); //从靠近中心往远处
+        let i = 0;
+        while (true) {
+            if (arr1[i] == undefined || arr2[i] == undefined || arr1[i] != arr2[i]) {
+                return arr1.slice(0, i); //从靠近中心往远处
             }
+            i++;
         }
     }
     function longestPalindromeByCenter(center, isInterval) {  //center: index of center
         let right_half = "";
         if (isInterval) {
-            right_half = longestPrefix(s.splice(0, center + 1), s.splice(center + 1), s.length);
+            right_half = longestPrefix(s.slice(0, center + 1), s.slice(center + 1), s.length);
             return [...right_half].reverse().concat(right_half).join('');
         } else {
-            right_half = longestPrefix(s.splice(0, center), s.splice(center + 1), s.length);
-            return [[...right_half].reverse(), s[center]].concat(right_half).join('');
+            right_half = longestPrefix(s.slice(0, center), s.slice(center + 1), s.length);
+            return [...[...right_half].reverse(), s[center]].concat(right_half).join('');
         }
     }
     let longest = '';
     for (let i = 0; i < s.length; i++){
         let tmp = longestPalindromeByCenter(i, false);
         if (tmp.length > longest.length) longest = tmp;
-        let tmp = longestPalindromeByCenter(i, true);
-        if (tmp.length > longest.length) longest = tmp;
+        if (i < s.length - 1) {
+            tmp = longestPalindromeByCenter(i, true);
+            if (tmp.length > longest.length) longest = tmp;
+        }
     }
     return longest;
 
 };
 // @lc code=end
 
+
+// @after-stub-for-debug-begin
+module.exports = longestPalindrome;
+// @after-stub-for-debug-end
