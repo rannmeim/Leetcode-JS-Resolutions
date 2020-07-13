@@ -67,6 +67,7 @@ var arrayPairSum = function (nums) {
     })
     return minSum
 
+    // [1,4,3,2,1,4,3,21,4,3,2,-80]
 };
 // @lc code=end
 
