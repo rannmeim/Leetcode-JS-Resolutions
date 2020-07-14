@@ -50,12 +50,12 @@ var arrayPairSum = function (nums) {
         let right = nums.length - 1;
         let compLeft = true; // 比较是否小于轴值
         while (left < right) {
-            console.log(nums)
             if (nums[left] <= nums[right]) {
                 compLeft ? left++ : right--;
             } else {
                 [nums[left], nums[right]] = [nums[right], nums[left]];
                 compLeft ? right-- : left++;
+                compLeft = !compLeft;
             }
         }
         return [...quickSort(nums.slice(0,left)), nums[left], ...quickSort(nums.slice(left+1, nums.length))]
@@ -71,3 +71,6 @@ var arrayPairSum = function (nums) {
 };
 // @lc code=end
 
+// @after-stub-for-debug-begin
+module.exports = arrayPairSum;
+// @after-stub-for-debug-end
