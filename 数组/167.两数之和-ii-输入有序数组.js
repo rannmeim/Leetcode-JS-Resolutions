@@ -52,23 +52,37 @@ O(n*log(n))
 O(n)
  */
 var twoSum = function (numbers, target) {
-    // 考虑最小的数 为负数
-    let add = -numbers[0];
-    target += 2 * add;
-    let arrIndexedByVal = Array(numbers[numbers.length - 1] + add).fill(-1);
+    
+    // numbers中可包含重复元素  返回中index不可重复  即值相同inde不同的 为不同元素
+    let offset = -numbers[0]; // numbers元素偏移量 并使numbers[0]的值偏移为0 （解决最小的数 为负数/最小的数很大 的问题）
+    target += 2 * offset;
+    let arrIndexedByVal = Array(numbers[numbers.length - 1] + offset + 1).fill([]); //最小0 最大numbers[-1]+offset  共 *+1 长度
     numbers.forEach((item, index) => {
-        arrIndexedByVal[index + add] = item; //让numbers[0]在arrIndexedByVal中的位置为0
+        arrIndexedByVal[item + offset] = [...arrIndexedByVal[item + offset], index]; // 防止每个元素的指向同一个数组
     });
-    let a, b;
-    arrIndexedByVal.forEach((item, index) => {
-        a = arrIndexedByVal[index];
-        b = arrIndexedByVal[target - a];
-        if (b !== -1 && a < b) {
-            return
-        }
-    });
+    let aInd, bInd;
+    for (let i = 0; i < arrIndexedByVal.length; i++){
+        console.log(i)
+        aInds = arrIndexedByVal[i];
+        if (aInds.length && target - i < arrIndexedByVal.length) {
+            bInds = arrIndexedByVal[target - i];
+            if (bInds.length) {
+                aInd = aInds[0]
+                if (i === target - i) {
+                    if (aInds.length > 1) {
+                        bInd = aInds[aInds.length-1]
+                        break
+                    } else {
+                        continue
+                    }
 
-    return [a + 1, b + 1];    
+                }
+                bInd = bInds[0]
+                break
+            }
+        }
+    }
+    return [aInd + 1, bInd + 1];  
 };
 // @lc code=end
 
