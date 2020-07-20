@@ -39,21 +39,41 @@
   */
 // @lc code=start
 /**
- * @param {number} s
- * @param {number[]} nums
+ * @param {number} s 正整数
+ * @param {number[]} nums 正整数数组
  * @return {number}
+ */
+/* 
+思路： 
+找到以0为首位置的最小连续子数组
+找到以1为首位置，长度小于已找到子数组
+... 以此类推 直到len - 1
+
+并不是双指针的方法，因为f，s指针不应该回退
  */
 var minSubArrayLen = function (s, nums) {
     let max = 0;
     let f = 0; // 将要检判的位置
-    let s = 0; // 子串的开头位置
+    let sl = 0; // 子串的开头位置
     let sum = 0;
-    while (f < nums.length) {
-        
-
+    while (sl < nums.length) {
+        if (f >= nums.length || max && f - sl >= max) {
+            sl++;
+            f = sl;
+            sum = 0;
+            continue;
+        }
+        sum += nums[f];
+        if (sum >= s) {
+            max = f - sl + 1;
+            sl++;
+            f = sl;
+            sum = 0;
+            continue;
+        }
         f++;
     }
-
+    return max;
 };
 // @lc code=end
 
