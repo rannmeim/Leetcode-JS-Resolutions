@@ -50,6 +50,9 @@ O(n*log(n))
 2. 遍历nums，将nums[i]的值作为index, i作为arr中的值
 3. 遍历arr，查找sum-i的值是否不为-1
 O(n)
+
+方法三：
+双指针
  */
 var twoSum = function (numbers, target) {
     

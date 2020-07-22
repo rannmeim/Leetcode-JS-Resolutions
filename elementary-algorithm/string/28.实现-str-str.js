@@ -44,25 +44,43 @@
  * @param {string} needle
  * @return {number}
  */
-var strStr = function(haystack, needle) {
-     // build next  假设模式串非空
-    let next = [-1];
-    let j = 1; //正在计算next[j]   比较next[j-1]与next[t]
-    let t = 0; 
-    while (j < needle.length) {
-        if (next[j-1] == next[t]) {
-            t++;
-            next[j] = t;
-            j++;
-        } else {
-            if (t > 0) {
-                t = 0;
-            } else {
-                next[j] = 0;
+var strStr = function (haystack, needle) {
+    // return haystack.indexOf(needle);
+    function buildNext(needle) {
+        let len = needle.length;
+        let next = [-1];
+        let j = 0; // j代表准备填入的位置
+        let t = next[0]; // t代表公共前后缀长度
+        while (j < len - 1) {
+            if (t < 0 || needle[j] === needle[t]) {
                 j++;
+                t++;
+                next[j] = t;
+            } else {
+                t = next[t];
+            }
+        }
+        console.log(JSON.stringify(next));
+        return next
+    }
+    let next = buildNext(needle);
+    let len1 = haystack.length;
+    let len2 = needle.length;
+    let i = 0; // 主串指针
+    let j = 0; // 子串指针
+    while (i < len1 && j < len2) {
+        if (haystack[i] === needle[j]) {
+            i++;
+            j++
+        } else {
+            if (next[j] === -1) {
+                i++;
+            } else {
+                j = next[j];
             }
         }
     }
+    return j > len2 - 1 ? i - j : -1;
 };
 // @lc code=end
 
