@@ -59,7 +59,7 @@
  * @return {string}
  */
 var countAndSay = function (n) {
-    let result = '';
+    let result = '1';
     let i = 0;
     while (i < n) {
         if (i === 0) {
@@ -72,19 +72,15 @@ var countAndSay = function (n) {
                     count++;
                 } else {
                     tmp += count + result[j - 1];
-                    count = 0;
+                    count = 1;
                 }
             }
-            if (count) {
-                tmp += count + result[result.length - 1]
-            }
+            tmp += count + result[result.length - 1]
             result = tmp;
         }
-        console.log(result)
         i++;
     }
     return result;
-
 };
 // @lc code=end
 
