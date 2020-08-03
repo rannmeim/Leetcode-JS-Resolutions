@@ -51,12 +51,24 @@
  * @return {number[][]}
  */
 var levelOrder = function (root) {
-    function BFS(root) {
-        
-
+    let tree = [];
+    let queue = [];
+    if (!root) {
+        return tree;
     }
-    return [BFS(root)];
-
+    queue.push(root);
+    while (queue.length) {
+        let layer = [];
+        let len = queue.length;
+        for (let i = 0; i < len; i++){
+            let node = queue.shift();
+            if (node.left) queue.push(node.left);
+            if (node.right) queue.push(node.right);
+            layer.push(node.val)
+        }
+        tree.push(layer);
+    }
+    return tree;
 };
 // @lc code=end
 
