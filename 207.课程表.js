@@ -67,44 +67,62 @@
 　　4.重复2，直到所有点入度都为0，则为无环图，如果找不到入度为0的点，则为有环图。
  */
 var canFinish = function (numCourses, prerequisites) {
-    let visitedNode = Set(); // visitedNode  多趟共用  previous 单趟使用
-    function checkSubMap(node, previous) {
-        visitedNode.add(node)
-        if (previous.includes(node)) {
-            return false;
-        } else {
-            prerequisites.forEach(item => {
-                if (item[0] === node && !visitedNode.has(item[0])) {
-                    checkSubMap(item[1], [...previous, node])
-                }
-            })
-        }
-    }
+    // let visitedNode = Set(); // visitedNode  多趟共用  previous 单趟使用
+    // function checkSubMap(node, previous) {
+    //     visitedNode.add(node)
+    //     if (previous.includes(node)) {
+    //         return false;
+    //     } else {
+    //         prerequisites.forEach(item => {
+    //             if (item[0] === node && !visitedNode.has(item[0])) {
+    //                 checkSubMap(item[1], [...previous, node])
+    //             }
+    //         })
+    //     }
+    // }
 
-    // 使用迭代
-    // 合并prerequisites：头尾链接的
-    let visitedNode = Set(); // visitedNode  多趟共用  previous 单趟使用
-    let previous = []; // visitedNode  多趟共用  previous 单趟使用
+    // // 使用迭代
+    // // 合并prerequisites：头尾链接的
+    // let visitedNode = Set(); // visitedNode  多趟共用  previous 单趟使用
+    // let previous = []; // visitedNode  多趟共用  previous 单趟使用
 
-    while (visitedNode.size() < numCourses) {
-        // 找到一个起点
+    // while (visitedNode.size() < numCourses) {
+    //     // 找到一个起点
 
-    }
+    // }
 
     
 // -------
 
-
-    let inPoints = Set();
-    let statIn = Array(numCourses).fill(0)
-    // 1.统计各点入度
-    prerequisites.forEach(item => {
-        statIn[item[1]]++;
-        inPoints.add(item[0]);
+let usedPoints = new Set();
+let statIn = Array(numCourses).fill(0)
+// 1.统计各点入度
+prerequisites.forEach(item => {
+    statIn[item[1]]++;
+})
+console.log(statIn)
+while (true) {
+    let zeroInd = statIn.findIndex((item,index) => item === 0 && !usedPoints.has(index))
+    console.log(zeroInd)
+    if (zeroInd === -1) break;
+    usedPoints.add(zeroInd);
+    prerequisites = prerequisites.filter(item => {
+            console.log(item, item[0] === zeroInd)
+        if (item[0] === zeroInd) {
+            statIn[item[1]]--;
+            return false
+        } else {
+            return true
+        }
+        
     })
-    while (true) {
-        let zeroInPoint = prerequisites.indexOf(item=>item===0)
-    }
+}
+    console.log(prerequisites)
+return !prerequisites.length
 };
 // @lc code=end
 
+
+// @after-stub-for-debug-begin
+module.exports = canFinish;
+// @after-stub-for-debug-end
