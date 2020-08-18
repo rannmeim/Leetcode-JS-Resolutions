@@ -44,8 +44,24 @@
  * @param {number} n
  * @return {void} Do not return anything, modify nums1 in-place instead.
  */
-var merge = function(nums1, m, nums2, n) {
-
+var merge = function (nums1, m, nums2, n) {
+    /* 
+    使用指针，从后往前合并
+     */
+    let q1 = m - 1; // 将要比对的nums1位置
+    let q2 = n - 1; // 将要比对的nums2位置
+    let p = m + n - 1; // 将要放入的位置
+    while (p >= 0) {
+        if (q2 < 0 || nums1[q1] > nums2[q2]) {
+            nums1[p] = nums1[q1];
+            q1--;
+        } else {
+            nums1[p] = nums2[q2];
+            q2--;
+        }
+        p--;
+    }
+    console.log(JSON.stringify(nums1));
 };
 // @lc code=end
 
