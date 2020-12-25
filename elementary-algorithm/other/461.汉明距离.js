@@ -72,13 +72,10 @@ var hammingDistance = function (x, y) {
     let n = x ^ y
     let count = 0;
     while (n) {
-        console.log(n, n ^ (n - 1))
         n &= n - 1
-        console.log(n)
         count++
     }
     return count
-    
 };
 // @lc code=end
 
